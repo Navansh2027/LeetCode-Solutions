@@ -4,16 +4,19 @@
 
 using namespace std;
 
-class Solution {
+class Solution 
+{
 public:
-    int findMaxPathScore(vector<vector<int>>& edges, vector<bool>& online, long long k) {
+    int findMaxPathScore(vector<vector<int>>& edges, vector<bool>& online, long long k) 
+    {
         int n = online.size();
         
         vector<vector<pair<int, int>>> adj(n);
         vector<int> inDegree(n, 0);
         int max_cost = 0;
         
-        for (const auto& e : edges) {
+        for (const auto& e : edges) 
+        {
             int u = e[0], v = e[1], cost = e[2];
             adj[u].push_back({v, cost});
             inDegree[v]++;
@@ -24,38 +27,47 @@ public:
         topo.reserve(n);
         queue<int> q;
         
-        for (int i = 0; i < n; ++i) {
-            if (inDegree[i] == 0) {
+        for (int i = 0; i < n; ++i) 
+        {
+            if (inDegree[i] == 0) 
+            {
                 q.push(i);
             }
         }
         
-        while (!q.empty()) {
+        while (!q.empty()) 
+        {
             int u = q.front();
             q.pop();
             topo.push_back(u);
-            for (const auto& edge : adj[u]) {
+            for (const auto& edge : adj[u]) 
+            {
                 int v = edge.first;
-                if (--inDegree[v] == 0) {
+                if (--inDegree[v] == 0) 
+                {
                     q.push(v);
                 }
             }
         }
         
-        auto isValid = [&](int mid) {
+        auto isValid = [&](int mid) 
+        {
             const long long INF = 1e18; 
             vector<long long> dp(n, INF);
             dp[0] = 0;
             
-            for (int u : topo) {
+            for (int u : topo) 
+            {
                 if (dp[u] == INF) continue;
                 if (!online[u]) continue; 
                 
-                for (const auto& edge : adj[u]) {
+                for (const auto& edge : adj[u]) 
+                {
                     int v = edge.first;
                     int cost = edge.second;
                     
-                    if (cost >= mid) {
+                    if (cost >= mid) 
+                    {
                         dp[v] = min(dp[v], dp[u] + cost);
                     }
                 }
@@ -66,12 +78,16 @@ public:
         int left = 0, right = max_cost;
         int ans = -1;
         
-        while (left <= right) {
+        while (left <= right) 
+        {
             int mid = left + (right - left) / 2;
-            if (isValid(mid)) {
+            if (isValid(mid)) 
+            {
                 ans = mid;       
                 left = mid + 1;  
-            } else {
+            } 
+            else 
+            {
                 right = mid - 1; 
             }
         }
