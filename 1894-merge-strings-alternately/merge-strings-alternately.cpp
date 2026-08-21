@@ -19,7 +19,6 @@ public:
                 j++;
             }
         }
-
         return ans;
     }
 };
